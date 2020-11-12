@@ -4,15 +4,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class User implements Users {
+public class User extends Subject implements Users, Observer {
 	
 	private String id;
-	private Set<User> followers = new HashSet<User>();
-	private Set<User> following = new HashSet<User>();
+	private String name;
+	private Set<Users> followers = new HashSet<Users>();
+	private Set<Users> following = new HashSet<Users>();
 	private List<String> newsFeed = new ArrayList<String>();
 	
-	public User() {
+	public User(String name) {
 		id = UUID.randomUUID().toString();
+		this.name = name;
 	}
 	
 	public String getId() {
@@ -23,35 +25,54 @@ public class User implements Users {
 		this.id = id;
 	}
 	
-	public Set<User> getFollowers() {
+	public Set<Users> getFollowers() {
 		return followers;
 	}
 	
-	public void setFollowers(Set<User> followers) {
-		this.followers = followers;
+	public void addFollower(Users follower) {
+		followers.add(follower);
 	}
 	
-	public Set<User> getFollowing() {
+	public Set<Users> getFollowing() {
 		return following;
 	}
 	
-	public void setFollowing(Set<User> following) {
-		this.following = following;
-	}
 	
 	public List<String> getNewsFeed() {
 		return newsFeed;
 	}
-
-	public void setNewsFeed(List<String> newsFeed) {
-		this.newsFeed = newsFeed;
+	
+	public void postTweet(String tweet) { // subject
+		newsFeed.add(tweet);
+		super.notifyObservers(tweet);
 	}
 
 	public void follow(User user) {
 		following.add(user);
 	}
 	
-	public String toString() {
-		return id;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public void notification(Subject user, String message) { // update (observer)
+		// TODO Auto-generated method stub
+		if(user instanceof User) {
+			System.out.println("---------------------------------------");
+			System.out.println("New tweet!");
+			System.out.println(((User) user).getName() + ": " + message);
+			System.out.println("---------------------------------------");
+		}
+	}
+
+	@Override
+	public void accept(UsersVisitor visitor) {
+		// TODO Auto-generated method stub
+		visitor.visitUser(this);
 	}
 }

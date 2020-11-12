@@ -1,0 +1,29 @@
+		AdminControlPanel controlPanel = AdminControlPanel.getInstance();
+		UserGroup root = new UserGroup();
+		controlPanel.addUserGroup(root);
+		
+		User user1 = new User();
+		user1.setName("Tony");
+		User user2 = new User();
+		user2.setName("Bob");
+		User user3 = new User();
+		user2.setName("David");
+		User user4 = new User();
+		user2.setName("Frank");
+				
+		// user is a subject & observer
+		user1.attach(user2);
+		user2.attach(user1);
+		user2.attach(user3);
+		user2.attach(user4);
+		
+		user1.postTweet("First tweet!");
+		user2.postTweet("Hello world!");
+		
+		UsersVisitor countTweets = new CountTweetsVisitor();
+		UsersVisitor countGroups = new CountGroupsVisitor();
+		UsersVisitor countUsers = new CountUsersVisitor();
+		UsersVisitor positiveTweets = new PositiveTweetsVisitor();
+		
+		user1.accept(countTweets);
+		user2.accept(countGroups);
