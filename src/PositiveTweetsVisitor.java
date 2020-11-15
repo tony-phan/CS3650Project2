@@ -5,8 +5,6 @@ public class PositiveTweetsVisitor implements UsersVisitor {
 	
 	@Override
 	public void visitUser(Users user) {
-		int positiveTweets = 0;
-		
-		System.out.printf("% of positive tweets: %f\n", positiveTweets);
+		System.out.printf("%d has posted a positive tweet\n", user.getName());
 	}
 }

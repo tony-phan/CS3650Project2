@@ -1,17 +1,20 @@
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import javax.swing.JButton;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.JTextField;
-import java.awt.event.ActionListener;
-import java.util.Map;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class UserGUI extends JPanel {
+	
 	private JTextField userIDField;
 	private JTextField tweetMessageField;
 	AdminPanel admin = AdminPanel.getInstance();
@@ -19,13 +22,15 @@ public class UserGUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public UserGUI(User user, Map<Integer, User> currentIndividualUsers) {
+	public UserGUI(User user, Map<Integer, User> currentIndividualUsers, List<String> newsFeed) {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{4, 87, 0, 133, 72, 7, 83, 102, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 1, 262, 21, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		setLayout(gridBagLayout);
+		
+		
 		
 		JButton btnNewButton = new JButton("Follow User");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -82,7 +87,7 @@ public class UserGUI extends JPanel {
 		JButton btnNewButton_1 = new JButton("Post Tweet");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				//user.accept(new );
 			}
 		});
 		

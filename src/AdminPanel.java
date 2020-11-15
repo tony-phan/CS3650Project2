@@ -22,6 +22,8 @@ public class AdminPanel extends JPanel {
 	private Map<Integer, Users> currentUserGroups = new HashMap<Integer, Users>();
 	private int numTweets = 0;
 	private int numPositiveTweets = 0;
+	private int numUser = 0;
+	private int numGroups = 0;
 	private UserTree treeView;
 
 	
@@ -30,10 +32,6 @@ public class AdminPanel extends JPanel {
 			instance = new AdminPanel();
 		}
 		return instance;
-	}
-	
-	private void updateNumPositiveTweets() {
-		numPositiveTweets++;
 	}
 	
 	/**
@@ -74,7 +72,11 @@ public class AdminPanel extends JPanel {
 				else if(newUser == null) {
 				}
 				else {
-					currentIndividualUsers.put(newUser.toString().hashCode(), newUser);
+					++numUser;
+					try {
+						currentIndividualUsers.put(newUser.toString().hashCode(), newUser);
+					}
+					catch (NullPointerException exception) {}
 				}
 			}
 		});
@@ -120,9 +122,12 @@ public class AdminPanel extends JPanel {
 				else if(newGroup == null) {
 				}
 				else {
-					currentUserGroups.put(newGroup.toString().hashCode(), newGroup);
+					++numGroups;
+					try {
+						currentUserGroups.put(newGroup.toString().hashCode(), newGroup);
+					}
+					catch (NullPointerException exception) {}
 				}
-
 			}
 		});
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
@@ -136,7 +141,7 @@ public class AdminPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				User selectedUser = (User)treeView.getCurrentNode();
 				if(selectedUser != null) {
-					UserPanelGUI userGUI = new UserPanelGUI(selectedUser, currentIndividualUsers);
+					UserPanelGUI userGUI = new UserPanelGUI(selectedUser, currentIndividualUsers, selectedUser.getNewsFeed());
 					userGUI.setVisible(true);
 				}
 				else {
