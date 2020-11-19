@@ -1,24 +1,38 @@
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class UserPanelGUI extends JFrame {
 	
-	UserGUI userPanel;
+	UserPanel userPanel;
 	
-	public UserPanelGUI(User user, Map<Integer, User> currentUsers, List<String> newsFeed) {
+	public UserPanelGUI(User user, HashMap<Integer, User> currentUserSet, List<String> tweets) {
 		super("User Panel");
-		
 		setLayout(new BorderLayout());
-        setSize(600, 450);
+		setVisible(true);
+		UserPanelGUI currentPanel = this;
 		
-		userPanel = new UserGUI(user, currentUsers, newsFeed);
-
+		userPanel = new UserPanel(user, currentUserSet, tweets);
+		JButton updateTweetsButton = new JButton("Get Tweets Updates");
+		
 		Container c = getContentPane();
 		
 		c.add(userPanel, BorderLayout.CENTER);
+		c.add(updateTweetsButton, BorderLayout.SOUTH);
+		updateTweetsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				UserPanelGUI newPanel = new UserPanelGUI(user, currentUserSet, tweets);
+				newPanel.setVisible(true);
+				currentPanel.dispose();
+			}
+		});
 	}
 }

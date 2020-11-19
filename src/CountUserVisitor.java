@@ -1,5 +1,5 @@
 
-public class CountGroupsVisitor implements UsersVisitor {
+public class CountUserVisitor implements UsersVisitor {
 
 	@Override
 	public void visitUser(Users user) {

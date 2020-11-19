@@ -1,48 +1,36 @@
-import java.util.List;
-import java.util.UUID;
+import java.util.HashMap;
 
 public class UserGroup implements Users {
 	
 	private String groupID;
-	private String groupName;
-	private List<Users> users;
+	private HashMap<Integer, Users> members = new HashMap<Integer, Users>();
 	
-	public UserGroup(String groupName) {
-		groupID = UUID.randomUUID().toString();
-		this.groupName = groupName;
-	}
-	
-	public List<Users> getUsers() {
-		return users;
-	}
-	
-	public void addUsers(Users user) {
-		users.add(user);
-	}
-	
-	public String getGroupID() {
-		return groupID;
-	}
-
-	public void setGroupID(String groupID) {
+	public UserGroup(String groupID) {
 		this.groupID = groupID;
 	}
 	
-	public String toString() {
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
 		return groupID;
 	}
-
-	public String getName() {
-		return groupName;
-	}
-
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+	
+	public boolean addUser(Users user) {
+		if(members.containsKey(user.toString().hashCode())) {
+			System.out.println("User already exists.");
+			return false;
+		}
+		members.put(user.toString().hashCode(), user);
+		return true;
 	}
 
 	@Override
 	public void accept(UsersVisitor visitor) {
 		// TODO Auto-generated method stub
 		visitor.visitUser(this);
+	}
+	
+	public String toString() {
+		return groupID;
 	}
 }

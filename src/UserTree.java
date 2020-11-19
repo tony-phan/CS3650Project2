@@ -11,67 +11,72 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class UserTree extends JPanel {
 	
+	private JTree userTree;
+	private DefaultTreeModel userTreeModel;
 	private DefaultMutableTreeNode root;
-	private JTree tree;
-	private DefaultTreeModel treeModel;
 	
-	/**
-	 * Create the panel.
-	 */
 	public UserTree() {
-		super(new GridLayout(1,0));
-		root = new DefaultMutableTreeNode("Root"); 
-		treeModel = new DefaultTreeModel(root);
-		tree = new JTree(treeModel);
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		tree.setShowsRootHandles(true);
+		super(new GridLayout(1, 0));
 		
-		JScrollPane pane = new JScrollPane(tree);
-		add(pane);
-
+		root = new DefaultMutableTreeNode("Root");
+		userTreeModel = new DefaultTreeModel(root);
+		userTree = new JTree(userTreeModel);
+		userTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		userTree.setShowsRootHandles(true);
+		JScrollPane scrollPane = new JScrollPane(userTree);
+		add(scrollPane);
 	}
-	
-	private DefaultMutableTreeNode addedUser(boolean visibility, DefaultMutableTreeNode parentNode, Users childNode) {
-		DefaultMutableTreeNode child = new DefaultMutableTreeNode(childNode);
-        if (parentNode == null) {
-        	parentNode = root;
-        }
-        if(parentNode.getUserObject() instanceof User) {
-            return null;
-        }
-        treeModel.insertNodeInto(child, parentNode, parentNode.getChildCount());
-        if (visibility) {
-            tree.scrollPathToVisible(new TreePath(child.getPath()));
-        }
-        return child;
-    }
 
-	public DefaultMutableTreeNode addUser(Users childNode) {
-		DefaultMutableTreeNode parentNode = null;
-        TreePath parent = tree.getSelectionPath();
+	public JTree getUserTree() {
+		return userTree;
+	}
 
-        if (parent == null) {
-            parentNode = root;
-        }
-        else {
-            parentNode = (DefaultMutableTreeNode)(parent.getLastPathComponent());
-        }
-        DefaultMutableTreeNode nodeAdded = addedUser(true, parentNode, childNode);
-        return nodeAdded;
+	public DefaultTreeModel getUserTreeModel() {
+		return userTreeModel;
+	}
+
+	public DefaultMutableTreeNode getRoot() {
+		return root;
 	}
 	
 	public Users getCurrentNode() {
-        TreePath selectedPath = tree.getSelectionPath();
-        if (selectedPath != null) {
-            DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (selectedPath.getLastPathComponent());
-            if(currentNode.getUserObject() instanceof UserGroup){
-                return null;
-            }
-            MutableTreeNode parentNode = (MutableTreeNode) (currentNode.getParent());
-            if (parentNode != null) {
-                return (User) currentNode.getUserObject();
-            }
-        }
-        return null;
-    }
+		if(userTree.getSelectionPath() != null) {
+			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (userTree.getSelectionPath().getLastPathComponent()); 
+			if(currentNode.getUserObject() instanceof UserGroup) {
+				return null;
+			}
+			MutableTreeNode parent = (MutableTreeNode)(currentNode.getParent());
+			if(parent != null) {
+				return (User)currentNode.getUserObject();
+			}
+		}
+		return null;
+	}
+	
+	public DefaultMutableTreeNode addUsers(Users userChild) {
+		DefaultMutableTreeNode parentNode = null;
+		TreePath path = userTree.getSelectionPath();
+		if(path == null) {
+			parentNode = root;
+		}
+		else {
+			parentNode = (DefaultMutableTreeNode)(path.getLastPathComponent());
+		}
+		return addUsers(parentNode, userChild, true);
+	}
+	
+	public DefaultMutableTreeNode addUsers(DefaultMutableTreeNode parent, Users userChild, boolean visibility) {
+		DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(userChild);
+		if(parent == null) {
+			parent = root;
+		}
+		if(parent.getUserObject() instanceof User) {
+			return null;
+		}
+		userTreeModel.insertNodeInto(childNode, parent, parent.getChildCount());
+		if(visibility) {
+			userTree.scrollPathToVisible(new TreePath(childNode.getPath()));
+		}
+		return childNode;
+	}
 }

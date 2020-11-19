@@ -1,17 +1,15 @@
-import java.awt.BorderLayout;
-import java.awt.Container;
-
+import java.awt.*;
 import javax.swing.JFrame;
 
 public class AdminControlPanelGUI extends JFrame {
 	
-	AdminPanel adminPanel;
+	AdminControlPanel adminPanel;
 	
 	public AdminControlPanelGUI() {
 		super("Admin Control Panel");
 		setLayout(new BorderLayout());
 		
-		adminPanel = AdminPanel.getInstance();
+		adminPanel = AdminControlPanel.getInstance();
 
 		Container c = getContentPane();
 		
