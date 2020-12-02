@@ -6,10 +6,12 @@ import visitor.UsersVisitor;
 public class UserGroup implements Users {
 	
 	private String groupID;
+	private long creationTime;
 	private HashMap<Integer, Users> members = new HashMap<Integer, Users>();
 	
-	public UserGroup(String groupID) {
+	public UserGroup(String groupID, long creationTime) {
 		this.groupID = groupID;
+		this.creationTime = creationTime;
 	}
 	
 	@Override
@@ -33,6 +35,10 @@ public class UserGroup implements Users {
 		visitor.visitUser(this);
 	}
 	
+	public long getCreationTime() {
+		return creationTime;
+	}
+
 	public String toString() {
 		return groupID;
 	}

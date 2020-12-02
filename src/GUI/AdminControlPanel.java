@@ -5,6 +5,9 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -17,6 +20,7 @@ import composite.Users;
 
 import java.awt.Insets;
 
+@SuppressWarnings("serial")
 public class AdminControlPanel extends JPanel {
 	
 	private static AdminControlPanel instance;
@@ -27,6 +31,7 @@ public class AdminControlPanel extends JPanel {
 	private int numTweets = 0;
 	private int numPositiveTweets = 0;
 	private UserTree tree;
+	private boolean validID = true;
 	HashMap<Integer, User> individualUsers = new HashMap<Integer, User>();
 	HashMap<Integer, Users> groupUsers = new HashMap<Integer, Users>();
 	
@@ -51,7 +56,10 @@ public class AdminControlPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, "Error: User already exists");
                 }
                 else {
-                    newUser = new User(addUserTextBox.getText());
+                	if((addUserTextBox.getText()).contains(" ")) {
+                		validID = false;
+                	}
+                    newUser = new User(addUserTextBox.getText(), System.currentTimeMillis());
                 }
 				
 				if(newUser == null) { }
@@ -85,7 +93,7 @@ public class AdminControlPanel extends JPanel {
 		addUserTextBox.setColumns(10);
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 38, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWidths = new int[]{0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		setLayout(gridBagLayout);
 		GridBagConstraints g = new GridBagConstraints();
 		g.weighty = 1;
@@ -113,7 +121,7 @@ public class AdminControlPanel extends JPanel {
 		add(btnNewButton_2, gbc_btnNewButton_2);
 		GridBagConstraints gbc_tree = new GridBagConstraints();
 		gbc_tree.insets = new Insets(0, 0, 5, 0);
-		gbc_tree.gridx = 9;
+		gbc_tree.gridx = 10;
 		gbc_tree.gridy = 0;
 		add(tree, gbc_tree);
 		
@@ -125,7 +133,10 @@ public class AdminControlPanel extends JPanel {
 	            	 JOptionPane.showMessageDialog(null, "This userGroup already exists");
 	             }
 	             else {
-	            	 newGroup = new UserGroup(addGroupTextBox.getText());
+	            	 if((addGroupTextBox.getText()).contains(" ")) {
+	                		validID = false;
+	                	}
+	            	 newGroup = new UserGroup(addGroupTextBox.getText(), System.currentTimeMillis());
 	             }
 	             if(newGroup == null) { }
 	             else if(tree.addUsers(newGroup) == null){
@@ -179,7 +190,7 @@ public class AdminControlPanel extends JPanel {
 		btnNewButton_4.setBounds(271, 299, 200, 21);
 		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
 		gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_4.gridx = 3;
+		gbc_btnNewButton_4.gridx = 4;
 		gbc_btnNewButton_4.gridy = 1;
 		add(btnNewButton_4, gbc_btnNewButton_4);
 		
@@ -198,16 +209,55 @@ public class AdminControlPanel extends JPanel {
 		});
 		btnNewButton_5.setBounds(271, 268, 200, 21);
 		GridBagConstraints gbc_btnNewButton_5 = new GridBagConstraints();
-		gbc_btnNewButton_5.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton_5.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton_5.gridx = 2;
 		gbc_btnNewButton_5.gridy = 2;
 		add(btnNewButton_5, gbc_btnNewButton_5);
 		btnNewButton_3.setBounds(271, 237, 200, 21);
 		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
-		gbc_btnNewButton_3.insets = new Insets(0, 0, 0, 5);
-		gbc_btnNewButton_3.gridx = 3;
+		gbc_btnNewButton_3.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_3.gridx = 4;
 		gbc_btnNewButton_3.gridy = 2;
 		add(btnNewButton_3, gbc_btnNewButton_3);
+		
+		JButton btnNewButton_7 = new JButton("Validate User/Group ID's");
+		btnNewButton_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(validID) {
+					JOptionPane.showMessageDialog(null, "All User/Group ID's are valid");
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "There exist invalid User/Group ID's");
+				}
+			}
+		});
+		GridBagConstraints gbc_btnNewButton_7 = new GridBagConstraints();
+		gbc_btnNewButton_7.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton_7.gridx = 2;
+		gbc_btnNewButton_7.gridy = 3;
+		add(btnNewButton_7, gbc_btnNewButton_7);
+		
+		JButton btnNewButton_8 = new JButton("Show Last Updated User");
+		btnNewButton_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				long lastUpdatedTime = Long.MAX_VALUE;
+				User lastUpdatedUser = null;
+				Iterator itr = individualUsers.entrySet().iterator();
+				while(itr.hasNext()) {
+					Map.Entry<Integer, User> entry = (Map.Entry)itr.next();
+					if(entry.getValue().getLastUpdateTime() < lastUpdatedTime) {
+						lastUpdatedTime = entry.getValue().getLastUpdateTime();
+						lastUpdatedUser = entry.getValue();
+					}
+				}
+				JOptionPane.showMessageDialog(null, "Last Updated User: " + lastUpdatedUser.getName());
+			}
+		});
+		GridBagConstraints gbc_btnNewButton_8 = new GridBagConstraints();
+		gbc_btnNewButton_8.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton_8.gridx = 4;
+		gbc_btnNewButton_8.gridy = 3;
+		add(btnNewButton_8, gbc_btnNewButton_8);
 	}
 	
 	public void incrementNumTweets() {

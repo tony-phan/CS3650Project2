@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import composite.User;
 
+@SuppressWarnings("serial")
 public class UserPanelGUI extends JFrame {
 	
 	UserPanel userPanel;
@@ -22,7 +23,7 @@ public class UserPanelGUI extends JFrame {
 		UserPanelGUI currentPanel = this;
 		
 		userPanel = new UserPanel(user, currentUserSet, tweets);
-		JButton updateTweetsButton = new JButton("Get Tweets Updates");
+		JButton updateTweetsButton = new JButton("Get Tweet Updates");
 		
 		Container c = getContentPane();
 		

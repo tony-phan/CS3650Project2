@@ -2,6 +2,7 @@ package GUI;
 import java.awt.*;
 import javax.swing.JFrame;
 
+@SuppressWarnings("serial")
 public class AdminControlPanelGUI extends JFrame {
 	
 	AdminControlPanel adminPanel;

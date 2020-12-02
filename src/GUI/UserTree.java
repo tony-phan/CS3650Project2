@@ -14,6 +14,7 @@ import composite.User;
 import composite.UserGroup;
 import composite.Users;
 
+@SuppressWarnings("serial")
 public class UserTree extends JPanel {
 	
 	private JTree userTree;
